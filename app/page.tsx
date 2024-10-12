@@ -1,13 +1,22 @@
 'use client'
 
-
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { PlayCircle, PauseCircle, Calendar, Music, Disc } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Disc, Music, Calendar, ChevronDown, ChevronRight, Menu, X, Facebook, Twitter, Instagram, Linkedin, PlayCircle, PauseCircle } from 'lucide-react'
+import Image from 'next/image'
+import { Dialog } from '@headlessui/react'
 
 export default function Home() {
-  const [isPlaying, setIsPlaying] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [showAllTracks, setShowAllTracks] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [currentTrack, setCurrentTrack] = useState<string | null>(null)
+  const [showPastGigs, setShowPastGigs] = useState(false)
+  const [isNavOpen, setIsNavOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedEvent, setSelectedEvent] = useState<string | null>(null)
+  const [showGallery, setShowGallery] = useState(false)
+  const [selectedPastGig, setSelectedPastGig] = useState<string | null>(null)
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -21,6 +30,15 @@ export default function Home() {
     }
   }, [])
 
+  const tracks = [
+    { title: "Bollywood Tech House Mixtape Vol.2", album: "DJ HEMAN", src: "/DJ_HEMAN/dj-heman-bollywood-tech-house-mixtape-vol2/" },
+    { title: "dj-heman-bollywood-tech-house-mixtape-1", album: "dj-heman-bollywood-tech-house-mixtape-1", src: "/DJ_HEMAN/dj-heman-bollywood-tech-house-mixtape-1/" },
+    { title: "holi-party-mashup-2k24", album: "holi-party-mashup-2k24", src: "/DJ_HEMAN/holi-party-mashup-2k24/" },
+    { title: "Cyber Groove", album: "Digital Rhythms", src: "/DJ_HEMAN/cyber-groove/" },
+    { title: "Quantum Beat", album: "Particle Waves", src: "/DJ_HEMAN/quantum-beat/" },
+    { title: "Stellar Synth", album: "Cosmic Sounds", src: "/DJ_HEMAN/stellar-synth/" },
+  ]
+
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
       {/* Dynamic background effect */}
@@ -31,29 +49,33 @@ export default function Home() {
         }}
       />
 
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 p-6">
-        <div className="flex justify-between items-center">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+      {/* Toggle Sidebar Button */}
+      <button
+        onClick={() => setIsNavOpen(!isNavOpen)}
+        className="fixed top-4 left-4 z-50 p-2 bg-white text-black rounded-full"
+      >
+        {isNavOpen ? <X /> : <Menu />}
+      </button>
+
+      {/* Navigation Sidebar */}
+      <AnimatePresence>
+        {isNavOpen && (
+          <motion.nav
+            initial={{ x: '-100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '-100%' }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="fixed top-0 left-0 bottom-0 w-64 bg-gray-900 z-40 p-6"
           >
-            <img src="heman.png" alt="HEMAN Logo" className="h-12" />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex space-x-6"
-          >
-            <a href="#about" className="hover:text-gray-300 transition-colors">About</a>
-            <a href="#music" className="hover:text-gray-300 transition-colors">Music</a>
-            <a href="#events" className="hover:text-gray-300 transition-colors">Events</a>
-            <a href="#contact" className="hover:text-gray-300 transition-colors">Contact</a>
-          </motion.div>
-        </div>
-      </nav>
+            <div className="flex flex-col space-y-6 mt-16">
+              <a href="#about" className="hover:text-gray-300 transition-colors" onClick={() => setIsNavOpen(false)}>About</a>
+              <a href="#music" className="hover:text-gray-300 transition-colors" onClick={() => setIsNavOpen(false)}>Music</a>
+              <a href="#events" className="hover:text-gray-300 transition-colors" onClick={() => setIsNavOpen(false)}>Events</a>
+              <a href="#contact" className="hover:text-gray-300 transition-colors" onClick={() => setIsNavOpen(false)}>Contact</a>
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
 
       {/* Hero Section */}
       <section className="h-screen flex items-center justify-center relative">
@@ -63,26 +85,20 @@ export default function Home() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <h1 className="text-6xl font-bold mb-4">HEMAN</h1>
+          <h1 className="text-6xl font-bold mb-4">DJ H3MAN</h1>
           <p className="text-xl mb-8">Experience the Sound of the Future</p>
-          <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="bg-white text-black py-2 px-6 rounded-full flex items-center hover:bg-gray-200 transition-colors"
-          >
-            {isPlaying ? (
-              <>
-                <PauseCircle className="mr-2" />
-                Pause Track
-              </>
-            ) : (
-              <>
-                <PlayCircle className="mr-2" />
-                Play Latest Track
-              </>
-            )}
-          </button>
+          <div className="w-full max-w-xl mx-auto">
+            <iframe 
+              width="100%" 
+              height="400" 
+              src="https://player-widget.mixcloud.com/widget/iframe/?light=1&feed=%2FDJ_HEMAN%2Fdj-heman-bollywood-tech-house-mixtape-vol2%2F" 
+              frameBorder="0"
+              title="DJ HEMAN - Bollywood Tech House Mixtape Vol.2"
+              className="rounded-lg shadow-lg"
+            ></iframe>
+          </div>
         </motion.div>
-
+        
         {/* Animated vinyl records */}
         <motion.div
           animate={{ rotate: 360 }}
@@ -135,24 +151,46 @@ export default function Home() {
             Latest Tracks
           </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map((track) => (
+            {tracks.slice(0, showAllTracks ? tracks.length : 3).map((track, index) => (
               <motion.div
-                key={track}
+                key={index}
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: track * 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-black p-6 rounded-lg"
               >
-                <div className="aspect-square bg-gray-800 mb-4 rounded-md flex items-center justify-center">
-                  <Music size={48} />
+                <div className="aspect-w-16 aspect-h-9 mb-4">
+                  <iframe 
+                    width="100%" 
+                    height="120" 
+                    src={`https://player-widget.mixcloud.com/widget/iframe/?light=1&feed=${encodeURIComponent(track.src)}`}
+                    frameBorder="0"
+                    title={`${track.title} by ${track.album}`}
+                    className="rounded-lg"
+                  ></iframe>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Track Title {track}</h3>
-                <p className="text-gray-400 mb-4">Album Name</p>
-                <button className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200 transition-colors">
-                  Listen Now
-                </button>
+                <h3 className="text-xl font-semibold mb-2">{track.title}</h3>
+                <p className="text-gray-400 mb-4">{track.album}</p>
               </motion.div>
             ))}
+          </div>
+          <div className="mt-8 text-center">
+            {!showAllTracks && (
+              <button
+                onClick={() => setShowAllTracks(true)}
+                className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200 transition-colors inline-flex items-center"
+              >
+                View More <ChevronDown className="ml-2" />
+              </button>
+            )}
+            {showAllTracks && (
+              <a
+                href="#"
+                className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200 transition-colors inline-flex items-center"
+              >
+                View All Tracks <ChevronRight className="ml-2" />
+              </a>
+            )}
           </div>
         </div>
       </section>
@@ -235,7 +273,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="py-6 text-center text-gray-500">
-        <p>&copy; 2024 HEMAN. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} HEMAN. All rights reserved.</p>
       </footer>
     </div>
   )
