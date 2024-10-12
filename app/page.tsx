@@ -2,21 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Disc, Music, Calendar, ChevronDown, ChevronRight, Menu, X, Facebook, Twitter, Instagram, Linkedin, PlayCircle, PauseCircle } from 'lucide-react'
+import { Disc, ChevronDown, ChevronRight, Menu, X, Calendar } from 'lucide-react'
 import Image from 'next/image'
-import { Dialog } from '@headlessui/react'
+import Link from 'next/link'
 
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [showAllTracks, setShowAllTracks] = useState(false)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTrack, setCurrentTrack] = useState<string | null>(null)
-  const [showPastGigs, setShowPastGigs] = useState(false)
   const [isNavOpen, setIsNavOpen] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedEvent, setSelectedEvent] = useState<string | null>(null)
-  const [showGallery, setShowGallery] = useState(false)
-  const [selectedPastGig, setSelectedPastGig] = useState<string | null>(null)
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -30,35 +23,13 @@ export default function Home() {
     }
   }, [])
 
-  const togglePlayback = (trackSrc: string) => {
-    if (isPlaying && currentTrack === trackSrc) {
-      setIsPlaying(false)
-      setCurrentTrack(null)
-    } else {
-      setIsPlaying(true)
-      setCurrentTrack(trackSrc)
-    }
-  }
-
   const tracks = [
-    { title: "Bollywood Tech House Mixtape Vol.2", album: "DJ HEMAN", src: "/tracks/bollywood-tech-house-vol2.mp3" },
-    { title: "Electro Pulse", album: "Future Beats", src: "/tracks/electro-pulse.mp3" },
-    { title: "Neon Nights", album: "Synthwave Dreams", src: "/tracks/neon-nights.mp3" },
-    { title: "Cyber Groove", album: "Digital Rhythms", src: "/tracks/cyber-groove.mp3" },
-    { title: "Quantum Beat", album: "Particle Waves", src: "/tracks/quantum-beat.mp3" },
-    { title: "Stellar Synth", album: "Cosmic Sounds", src: "/tracks/stellar-synth.mp3" },
-  ]
-
-  const upcomingGigs = [
-    { name: "Techno Nights", date: "2024-05-15", venue: "Club Neon", poster: "/images/gig-poster-1.jpg" },
-    { name: "Summer Beach Party", date: "2024-06-20", venue: "Sunset Beach", poster: "/images/gig-poster-2.jpg" },
-    { name: "Warehouse Rave", date: "2024-07-10", venue: "Industrial Zone", poster: "/images/gig-poster-3.jpg" },
-  ]
-
-  const pastGigs = [
-    { name: "New Year's Eve Bash", date: "2023-12-31", venue: "City Square", poster: "/images/past-gig-1.jpg" },
-    { name: "Valentine's Special", date: "2024-02-14", venue: "Love Lounge", poster: "/images/past-gig-2.jpg" },
-    { name: "St. Patrick's Day Rave", date: "2024-03-17", venue: "Green Room", poster: "/images/past-gig-3.jpg" },
+    { title: "Bollywood Tech House Mixtape Vol.2", album: "DJ HEMAN", src: "/DJ_HEMAN/dj-heman-bollywood-tech-house-mixtape-vol2/" },
+    { title: "dj-heman-bollywood-tech-house-mixtape-1", album: "dj-heman-bollywood-tech-house-mixtape-1", src: "/DJ_HEMAN/dj-heman-bollywood-tech-house-mixtape-1/" },
+    { title: "holi-party-mashup-2k24", album: "holi-party-mashup-2k24", src: "/DJ_HEMAN/holi-party-mashup-2k24/" },
+    { title: "Cyber Groove", album: "Digital Rhythms", src: "/DJ_HEMAN/cyber-groove/" },
+    { title: "Quantum Beat", album: "Particle Waves", src: "/DJ_HEMAN/quantum-beat/" },
+    { title: "Stellar Synth", album: "Cosmic Sounds", src: "/DJ_HEMAN/stellar-synth/" },
   ]
 
   return (
@@ -90,10 +61,10 @@ export default function Home() {
             className="fixed top-0 left-0 bottom-0 w-64 bg-gray-900 z-40 p-6"
           >
             <div className="flex flex-col space-y-6 mt-16">
-              <a href="#about" className="hover:text-gray-300 transition-colors" onClick={() => setIsNavOpen(false)}>About</a>
-              <a href="#music" className="hover:text-gray-300 transition-colors" onClick={() => setIsNavOpen(false)}>Music</a>
-              <a href="#events" className="hover:text-gray-300 transition-colors" onClick={() => setIsNavOpen(false)}>Events</a>
-              <a href="#contact" className="hover:text-gray-300 transition-colors" onClick={() => setIsNavOpen(false)}>Contact</a>
+              <Link href="#about" className="hover:text-gray-300 transition-colors" onClick={() => setIsNavOpen(false)}>About</Link>
+              <Link href="#music" className="hover:text-gray-300 transition-colors" onClick={() => setIsNavOpen(false)}>Music</Link>
+              <Link href="#events" className="hover:text-gray-300 transition-colors" onClick={() => setIsNavOpen(false)}>Events</Link>
+              <Link href="#contact" className="hover:text-gray-300 transition-colors" onClick={() => setIsNavOpen(false)}>Contact</Link>
             </div>
           </motion.nav>
         )}
@@ -107,24 +78,18 @@ export default function Home() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <h1 className="text-6xl font-bold mb-4">HEMAN</h1>
+          <h1 className="text-6xl font-bold mb-4">DJ H3MAN</h1>
           <p className="text-xl mb-8">Experience the Sound of the Future</p>
-          <button
-            onClick={() => togglePlayback("/tracks/featured-track.mp3")}
-            className="bg-white text-black py-2 px-6 rounded-full flex items-center hover:bg-gray-200 transition-colors"
-          >
-            {isPlaying && currentTrack === "/tracks/featured-track.mp3" ? (
-              <>
-                <PauseCircle className="mr-2" />
-                Pause Featured Track
-              </>
-            ) : (
-              <>
-                <PlayCircle className="mr-2" />
-                Play Featured Track
-              </>
-            )}
-          </button>
+          <div className="w-full max-w-xl mx-auto">
+            <iframe 
+              width="100%" 
+              height="400" 
+              src="https://player-widget.mixcloud.com/widget/iframe/?light=1&feed=%2FDJ_HEMAN%2Fdj-heman-bollywood-tech-house-mixtape-vol2%2F" 
+              frameBorder="0"
+              title="DJ HEMAN - Bollywood Tech House Mixtape Vol.2"
+              className="rounded-lg shadow-lg"
+            ></iframe>
+          </div>
         </motion.div>
         
         {/* Animated vinyl records */}
@@ -187,22 +152,23 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-black p-6 rounded-lg"
               >
-                <div className="aspect-square bg-gray-800 mb-4 rounded-md flex items-center justify-center">
-                  <Music size={48} />
+                <div className="aspect-w-16 aspect-h-9 mb-4">
+                  <iframe 
+                    width="100%" 
+                    height="120" 
+                    src={`https://player-widget.mixcloud.com/widget/iframe/?light=1&feed=${encodeURIComponent(track.src)}`}
+                    frameBorder="0"
+                    title={`${track.title} by ${track.album}`}
+                    className="rounded-lg"
+                  ></iframe>
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{track.title}</h3>
                 <p className="text-gray-400 mb-4">{track.album}</p>
-                <button
-                  onClick={() => togglePlayback(track.src)}
-                  className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200 transition-colors"
-                >
-                  {isPlaying && currentTrack === track.src ? 'Pause' : 'Play'}
-                </button>
               </motion.div>
             ))}
           </div>
           <div className="mt-8 text-center">
-            {!showAllTracks && tracks.length > 3 && (
+            {!showAllTracks && (
               <button
                 onClick={() => setShowAllTracks(true)}
                 className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200 transition-colors inline-flex items-center"
@@ -211,12 +177,12 @@ export default function Home() {
               </button>
             )}
             {showAllTracks && (
-              <a
+              <Link
                 href="#"
                 className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200 transition-colors inline-flex items-center"
               >
                 View All Tracks <ChevronRight className="ml-2" />
-              </a>
+              </Link>
             )}
           </div>
         </div>
@@ -231,50 +197,25 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="text-4xl font-bold mb-8 text-center"
           >
-            {showPastGigs ? "Past Gigs" : "Upcoming Gigs"}
+            Upcoming Gigs
           </motion.h2>
-          <div className="mb-8 text-center">
-            <button
-              onClick={() => setShowPastGigs(!showPastGigs)}
-              className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200 transition-colors"
-            >
-              {showPastGigs ? "Show Upcoming Gigs" : "Show Past Gigs"}
-            </button>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {(showPastGigs ? pastGigs : upcomingGigs).map((gig, index) => (
+          <div className="space-y-6">
+            {[1, 2, 3].map((event) => (
               <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-gray-900 p-6 rounded-lg"
+                key={event}
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: event * 0.1 }}
+                className="bg-gray-900 p-6 rounded-lg flex items-center"
               >
-                <Image src={gig.poster} alt={gig.name} width={300} height={400} className="w-full h-64 object-cover rounded-lg mb-4" />
-                <h3 className="text-xl font-semibold mb-2">{gig.name}</h3>
-                <p className="text-gray-400 mb-2">{new Date(gig.date).toLocaleDateString()}</p>
-                <p className="text-gray-400 mb-4">{gig.venue}</p>
-                {showPastGigs ? (
-                  <button
-                    onClick={() => {
-                      setSelectedPastGig(gig.name)
-                      setShowGallery(true)
-                    }}
-                    className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200 transition-colors"
-                  >
-                    View Details
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      setSelectedEvent(gig.name)
-                      setIsModalOpen(true)
-                    }}
-                    className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200 transition-colors"
-                  >
-                    Book Your Spot Now
-                  </button>
-                )}
+                <Calendar className="mr-4" size={32} />
+                <div>
+                  <h3 className="text-xl font-semibold">Event Name {event}</h3>
+                  <p className="text-gray-400">Date & Venue</p>
+                </div>
+                <button className="ml-auto bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200 transition-colors">
+                  Get Tickets
+                </button>
               </motion.div>
             ))}
           </div>
@@ -296,7 +237,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="max-w-md mx-auto mb-12"
+            className="max-w-md mx-auto"
           >
             <input
               type="text"
@@ -304,7 +245,6 @@ export default function Home() {
               className="w-full mb-4 p-2 rounded-md bg-black text-white"
             />
             <input
-              
               type="email"
               placeholder="Your Email"
               className="w-full mb-4 p-2 rounded-md bg-black text-white"
@@ -321,81 +261,13 @@ export default function Home() {
               Send Message
             </button>
           </motion.form>
-          <div className="flex justify-center space-x-6">
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">
-              <Facebook size={24} />
-            </a>
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">
-              <Twitter size={24} />
-            </a>
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">
-              <Instagram size={24} />
-            </a>
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">
-              <Linkedin size={24} />
-            </a>
-          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-6 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-500 mb-4 md:mb-0">&copy; {new Date().getFullYear()} HEMAN. All rights reserved.</p>
-            <div className="flex items-center">
-              <p className="text-gray-500 mr-2">Maintained and managed by</p>
-              <a href="https://jetweb.in" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-300 transition-colors">
-                jetweb.in
-              </a>
-            </div>
-          </div>
-        </div>
+      <footer className="py-6 text-center text-gray-500">
+        <p>&copy; {new Date().getFullYear()} HEMAN. All rights reserved.</p>
       </footer>
-
-      {/* Booking Modal */}
-      <Dialog open={isModalOpen} onClose={() => setIsModalOpen(false)} className="fixed z-50 inset-0 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen">
-          <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-          <div className="relative bg-white rounded-lg max-w-md w-full mx-4 p-6">
-            <Dialog.Title className="text-2xl font-bold mb-4 text-black">Book Your Spot</Dialog.Title>
-            <p className="mb-4 text-gray-600">Event: {selectedEvent}</p>
-            <form onSubmit={(e) => {
-              e.preventDefault()
-              alert(`Thanks for booking your spot at "${selectedEvent}". We will send you updates via email shortly.`)
-              setIsModalOpen(false)
-            }}>
-              <input type="text" placeholder="Name" className="w-full mb-4 p-2 border rounded" required />
-              <input type="email" placeholder="Email" className="w-full mb-4 p-2 border rounded" required />
-              <textarea placeholder="Message" rows={3} className="w-full mb-4 p-2 border rounded"></textarea>
-              <button type="submit" className="w-full bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition-colors">
-                Submit
-              </button>
-            </form>
-          </div>
-        </div>
-      </Dialog>
-
-      {/* Past Gig Gallery Modal */}
-      <Dialog open={showGallery} onClose={() => setShowGallery(false)} className="fixed z-50 inset-0 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen">
-          <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-          <div className="relative bg-white rounded-lg max-w-4xl w-full mx-4 p-6">
-            <Dialog.Title className="text-2xl font-bold mb-4 text-black">{selectedPastGig} Gallery</Dialog.Title>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {[1, 2, 3, 4, 5, 6].map((img) => (
-                <Image key={img} src={`/images/gallery-${img}.jpg`} alt={`Gallery image ${img}`} width={300} height={200} className="w-full h-48 object-cover rounded" />
-              ))}
-            </div>
-            <button
-              onClick={() => setShowGallery(false)}
-              className="mt-6 bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition-colors"
-            >
-              Close Gallery
-            </button>
-          </div>
-        </div>
-      </Dialog>
     </div>
   )
 }
